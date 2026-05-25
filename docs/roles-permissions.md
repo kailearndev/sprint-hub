@@ -1,8 +1,8 @@
-# TaskFlow Roles & Permissions
+# sprint-hub Roles & Permissions
 
 ## Roles
 
-TaskFlow uses workspace-level roles.
+sprint-hub uses workspace-level roles.
 
 ```txt
 OWNER

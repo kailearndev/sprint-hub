@@ -1,6 +1,6 @@
-# TaskFlow
+# sprint-hub
 
-TaskFlow is a project management SaaS inspired by Trello, Jira, and ClickUp. The goal of this project is to learn fullstack development through a realistic product with authentication, workspace management, role-based permissions, task tracking, real-time notifications, and deployment.
+sprint-hub is a project management SaaS inspired by Trello, Jira, and ClickUp. The goal of this project is to learn fullstack development through a realistic product with authentication, workspace management, role-based permissions, task tracking, real-time notifications, and deployment.
 
 ## Tech Stack
 
@@ -46,8 +46,8 @@ TaskFlow is a project management SaaS inspired by Trello, Jira, and ClickUp. The
 ## Project Structure
 
 ```txt
-taskflow/
-├── taskflow-fe/
+sprint-hub/
+├── sprint-hub-fe/
 │   ├── app/
 │   ├── components/
 │   ├── features/
@@ -55,7 +55,7 @@ taskflow/
 │   ├── lib/
 │   └── types/
 │
-├── taskflow-be/
+├── sprint-hub-be/
 │   ├── src/
 │   │   ├── auth/
 │   │   ├── users/
@@ -130,13 +130,13 @@ taskflow/
 ## Suggested Repository Names
 
 ```txt
-taskflow-fe
-taskflow-be
+sprint-hub-fe
+sprint-hub-be
 ```
 
 ## Suggested Domain
 
 ```txt
-taskflow.kai.dev
-app.taskflow.kai.dev
+sprint-hub.kai.dev
+app.sprint-hub.kai.dev
 ```

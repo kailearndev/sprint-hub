@@ -1,4 +1,4 @@
-# TaskFlow API Documentation
+# sprint-hub API Documentation
 
 Base URL:
 
@@ -111,8 +111,8 @@ Request:
 
 ```json
 {
-  "name": "TaskFlow Team",
-  "description": "Workspace for TaskFlow project"
+  "name": "sprint-hub Team",
+  "description": "Workspace for sprint-hub project"
 }
 ```
 
@@ -219,9 +219,9 @@ Request:
 
 ```json
 {
-  "name": "TaskFlow Backend",
+  "name": "sprint-hub Backend",
   "key": "TFBE",
-  "description": "Backend service for TaskFlow"
+  "description": "Backend service for sprint-hub"
 }
 ```
 

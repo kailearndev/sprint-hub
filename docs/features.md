@@ -1,8 +1,8 @@
-# TaskFlow Feature Specification
+# sprint-hub Feature Specification
 
 ## Product Goal
 
-TaskFlow helps teams manage workspaces, projects, and tasks using a Kanban-style workflow. This project is designed as a fullstack learning project with real-world architecture.
+sprint-hub helps teams manage workspaces, projects, and tasks using a Kanban-style workflow. This project is designed as a fullstack learning project with real-world architecture.
 
 ## Feature List
 

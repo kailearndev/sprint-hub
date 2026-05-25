@@ -1,6 +1,6 @@
-# TaskFlow Database Design
+# sprint-hub Database Design
 
-This document describes the database schema for TaskFlow.
+This document describes the database schema for sprint-hub.
 
 ## Database
 
