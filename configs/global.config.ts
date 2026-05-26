@@ -1,12 +1,16 @@
-import { INestApplication } from "@nestjs/common";
+import { INestApplication, ValidationPipe } from "@nestjs/common";
+import cookieParser from 'cookie-parser';
 
 
 export const globalConfig = (app: INestApplication) => {
+    app.use(cookieParser());
     app.enableCors({
         origin: '*',
-        methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
-        preflightContinue: false,
-        optionsSuccessStatus: 204,
     });
+    app.useGlobalPipes(new ValidationPipe({
+        whitelist: true,
+        transform: true,
+    }));
+
 
 }

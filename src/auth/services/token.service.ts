@@ -4,6 +4,7 @@ import { JwtService, JwtSignOptions } from '@nestjs/jwt';
 type JwtPayload = {
     sub: string;
     email?: string;
+    role?: string;
 };
 
 @Injectable()

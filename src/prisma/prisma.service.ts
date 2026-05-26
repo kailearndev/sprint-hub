@@ -1,7 +1,6 @@
+import { PrismaClient } from '@/generated/prisma/client';
 import { Injectable, OnModuleInit, OnModuleDestroy } from '@nestjs/common';
-// Import từ đường dẫn mới, không phải '@prisma/client'
 import { PrismaPg } from '@prisma/adapter-pg'; // Adapter cho PostgreSQL
-import { PrismaClient } from 'generated/prisma/client';
 
 @Injectable()
 export class PrismaService extends PrismaClient implements OnModuleInit, OnModuleDestroy {

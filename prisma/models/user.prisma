@@ -1,20 +1,22 @@
 model User {
-  id            String            @id @default(cuid())
-  email         String            @unique
-  password      String
-  name          String?
-  avatarUrl     String?
-  status        UserStatus        @default(ACTIVE)
+  id        String     @id @default(cuid())
+  email     String     @unique
+  password  String
+  name      String?
+  avatarUrl String?
+  status    UserStatus @default(ACTIVE)
+  role      UserRole   @default(USER)
 
-//   workspaceMembers WorkspaceMember[]
-//   assignedTasks     Task[]         @relation("TaskAssignee")
-//   createdTasks      Task[]         @relation("TaskCreator")
-//   comments          TaskComment[]
-//   activities        TaskActivity[]
-//   notifications     Notification[]
-  refreshTokens     RefreshToken[]
+  //   workspaceMembers WorkspaceMember[]
+  //   assignedTasks     Task[]         @relation("TaskAssignee")
+  //   createdTasks      Task[]         @relation("TaskCreator")
+  //   comments          TaskComment[]
+  //   activities        TaskActivity[]
+  //   notifications     Notification[]
+  refreshTokens RefreshToken[]
+  auditLogs     AuditLog[]     @relation("AuditLogActor")
 
-  createdAt     DateTime          @default(now())
-  updatedAt     DateTime          @updatedAt
-  deletedAt     DateTime?
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  deletedAt DateTime?
 }

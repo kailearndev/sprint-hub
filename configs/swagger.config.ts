@@ -9,7 +9,10 @@ export const swaggerConfig = (app: INestApplication) => {
         .setDescription('The sprint hub API description')
         .setVersion('1.0')
         .addTag('sprint-hub')
+        .addBearerAuth()
         .build();
     const documentFactory = () => SwaggerModule.createDocument(app, config);
-    SwaggerModule.setup('api', app, documentFactory);
+    SwaggerModule.setup('api/docs', app, documentFactory, {
+        jsonDocumentUrl: 'api/docs-json',
+    });
 }

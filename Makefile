@@ -48,34 +48,34 @@ logs:
 	$(COMPOSE) logs -f
 
 generate:
-	npx prisma generate
+	pnpx prisma generate
 
 migrate:
-	npx prisma migrate dev
+	pnpx prisma migrate dev
 
 deploy:
-	npx prisma migrate deploy
+	pnpx prisma migrate deploy
 
 reset-db:
-	npx prisma migrate reset
+	pnpx prisma migrate reset
 
 seed:
-	npx prisma db seed
+	pnpx prisma db seed
 
 studio:
-	npx prisma studio
+	pnpx prisma studio
 
 dev:
-	npm run start:dev
+	pnpm run start:dev
 
 build:
-	npm run build
+	pnpm run build
 
 lint:
-	npm run lint
+	pnpm run lint
 
 test:
-	npm run test
+	pnpm run test
 
 clean:
 	$(COMPOSE) down -v --remove-orphans
