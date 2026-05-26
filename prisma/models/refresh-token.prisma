@@ -1,15 +1,15 @@
 model RefreshToken {
-    id        String    @id @default(cuid())
-    tokenHash String
-    userId    String
-    userAgent String?
-    ipAddress String?
-    expiredAt DateTime
-    revokedAt DateTime?
+  id        String    @id @default(cuid())
+  tokenHash String
+  userId    String
+  userAgent String?
+  ipAddress String?
+  expiredAt DateTime
+  revokedAt DateTime?
 
-    user User @relation(fields: [userId], references: [id])
+  user User @relation(fields: [userId], references: [id])
 
-    createdAt DateTime @default(now())
+  createdAt DateTime @default(now())
 
-    @@index([userId])
+  @@index([userId])
 }
