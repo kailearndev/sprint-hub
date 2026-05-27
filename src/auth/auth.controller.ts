@@ -1,4 +1,4 @@
-import { Body, Controller, Post, Req, Res } from '@nestjs/common';
+import { Body, Controller, HttpCode, HttpStatus, Post, Req, Res } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { RegisterDto } from './dto/register.dto';
 import { LoginDto } from './dto/login.dto';
@@ -9,7 +9,7 @@ const accessTokenCookieOptions = {
     httpOnly: true,
     secure: process.env.NODE_ENV === 'production',
     sameSite: 'lax' as const,
-    path: '/',
+
     maxAge: 60 * 60 * 1000,
 };
 
@@ -17,7 +17,7 @@ const refreshTokenCookieOptions = {
     httpOnly: true,
     secure: process.env.NODE_ENV === 'production',
     sameSite: 'lax' as const,
-    path: '/auth',
+
     maxAge: 7 * 24 * 60 * 60 * 1000,
 };
 
@@ -33,6 +33,8 @@ export class AuthController {
         });
     }
     @Public()
+    
+    @HttpCode(HttpStatus.OK)
     @Post('login')
     async login(
         @Body() loginDto: LoginDto,
@@ -47,9 +49,12 @@ export class AuthController {
         res.cookie('accessToken', accessToken, accessTokenCookieOptions);
         res.cookie('refreshToken', refreshToken, refreshTokenCookieOptions);
 
-        return data;
+        return {
+            data: data,
+            message: 'Login successful',
+        };
     }
-
+    @HttpCode(HttpStatus.OK)
     @Public()
     @Post('refresh')
     async refresh(
@@ -62,8 +67,12 @@ export class AuthController {
 
         res.cookie('accessToken', data.accessToken, accessTokenCookieOptions);
 
-        return data;
+        return {
+            data: data,
+            message: 'Token refreshed successfully',
+        };
     }
+    @HttpCode(HttpStatus.OK)
     @Public()
     @Post('logout')
     async logout(
@@ -77,8 +86,8 @@ export class AuthController {
             userAgent: req.get('user-agent'),
         });
 
-        res.clearCookie('accessToken', { path: '/' });
-        res.clearCookie('refreshToken', { path: '/auth' });
+        res.clearCookie('accessToken');
+        res.clearCookie('refreshToken');
 
         return {
             message: 'Logout successful',

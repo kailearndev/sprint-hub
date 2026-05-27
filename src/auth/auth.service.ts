@@ -208,7 +208,7 @@ export class AuthService {
         });
 
         if (!user) {
-            throw new BadRequestException('Invalid credentials');
+            throw new BadRequestException('Cannot find user with the provided email');
         }
 
         return user;
