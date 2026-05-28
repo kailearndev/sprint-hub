@@ -1,17 +1,25 @@
 import { UserRole } from '@/generated/prisma/enums';
-import { ApiProperty } from '@nestjs/swagger';
-import { IsEmail, IsOptional } from 'class-validator';
+import { ApiPropertyOptional } from '@nestjs/swagger';
+import { IsEmail, IsEnum, IsOptional, IsString } from 'class-validator';
 
 export class UpdateUserDto {
-  @ApiProperty({ example: 'john.doe@example.com' })
-  @IsEmail()
-  email: string;
-
-  @ApiProperty({ enum: UserRole, example: UserRole.USER })
-  role: UserRole;
-  @ApiProperty({ example: 'John Doe' })
-  name: string;
-  @ApiProperty({ example: 'https://example.com/avatar.png' })
+  @ApiPropertyOptional({ example: 'john.doe@example.com' })
   @IsOptional()
+  @IsEmail()
+  email?: string;
+
+  @ApiPropertyOptional({ enum: UserRole, example: UserRole.USER })
+  @IsOptional()
+  @IsEnum(UserRole)
+  role?: UserRole;
+
+  @ApiPropertyOptional({ example: 'John Doe' })
+  @IsOptional()
+  @IsString()
+  name?: string;
+
+  @ApiPropertyOptional({ example: 'https://example.com/avatar.png' })
+  @IsOptional()
+  @IsString()
   avatarUrl?: string;
 }

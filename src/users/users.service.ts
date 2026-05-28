@@ -9,6 +9,7 @@ import {
 } from '@nestjs/common';
 import { paginate } from 'common/pagination/paginate';
 import { CreateUserDto } from './dto/create-user.dto';
+import { UpdateProfileDto } from './dto/update-profile.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { UserQueryDto } from './dto/user.query.dto';
 
@@ -24,7 +25,7 @@ export class UsersService {
     private readonly prisma: PrismaService,
     private readonly hashService: HashingService,
     private readonly auditlogService: AuditlogService,
-  ) {}
+  ) { }
 
   async create(
     createUserDto: CreateUserDto,
@@ -98,6 +99,7 @@ export class UsersService {
         id: true,
         email: true,
         name: true,
+        avatarUrl: true,
         role: true,
         status: true,
         createdAt: true,
@@ -116,6 +118,7 @@ export class UsersService {
         id: true,
         email: true,
         name: true,
+        avatarUrl: true,
         role: true,
         status: true,
         createdAt: true,
@@ -136,7 +139,7 @@ export class UsersService {
     auditContext?: AuditRequestContext,
   ) {
     await this.ensureUserExists(id);
-
+    await this.ensureUserNotExists(updateUserDto.email || '');
     const user = await this.prisma.user.update({
       where: { id },
       data: updateUserDto,
@@ -144,12 +147,14 @@ export class UsersService {
         id: true,
         email: true,
         name: true,
+        avatarUrl: true,
         role: true,
         status: true,
         createdAt: true,
         updatedAt: true,
       },
     });
+
     await this.auditlogService.create({
       action: AuditAction.USER_UPDATE,
       entity: 'User',
@@ -164,6 +169,43 @@ export class UsersService {
     return {
       message: 'User updated successfully',
     };
+  }
+
+  async updateProfile(
+    id: string,
+    updateUserDto: UpdateProfileDto,
+    auditContext?: AuditRequestContext,
+  ) {
+    await this.ensureUserExists(id);
+
+    const user = await this.prisma.user.update({
+      where: { id },
+      data: updateUserDto,
+      select: {
+        id: true,
+        email: true,
+        name: true,
+        avatarUrl: true,
+        role: true,
+        status: true,
+        createdAt: true,
+        updatedAt: true,
+      },
+    });
+
+    await this.auditlogService.create({
+      action: AuditAction.USER_UPDATE,
+      entity: 'User',
+      entityId: user.id,
+      actorId: auditContext?.actorId,
+      ipAddress: auditContext?.ipAddress,
+      userAgent: auditContext?.userAgent,
+      metadata: {
+        changedFields: Object.keys(updateUserDto),
+      },
+    });
+
+    return user;
   }
 
   async remove(id: string, auditContext?: AuditRequestContext) {

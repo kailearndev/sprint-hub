@@ -18,6 +18,7 @@ import { UpdateUserDto } from './dto/update-user.dto';
 import { UsersService } from './users.service';
 import { UserQueryDto } from './dto/user.query.dto';
 import type { Request } from 'express';
+import { UpdateProfileDto } from './dto/update-profile.dto';
 
 function getAuditContext(req: Request, user?: JwtPayload) {
   return {
@@ -32,8 +33,22 @@ export class UsersController {
   constructor(private readonly usersService: UsersService) {}
   @Get('me')
   me(@CurrentUser() user: JwtPayload) {
-    return user;
+    return this.usersService.findOne(user.sub);
   }
+
+  @Patch('me')
+  updateMe(
+    @Body() updateProfileDto: UpdateProfileDto,
+    @CurrentUser() user: JwtPayload,
+    @Req() req: Request,
+  ) {
+    return this.usersService.updateProfile(
+      user.sub,
+      updateProfileDto,
+      getAuditContext(req, user),
+    );
+  }
+
   @Roles(UserRole.SUPER_ADMIN)
   @Post()
   create(
