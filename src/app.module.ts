@@ -15,9 +15,14 @@ import { AuditlogModule } from './auditlog/auditlog.module';
     ConfigModule.forRoot({
       isGlobal: true, // This makes the ConfigService available everywhere
     }),
-    AuthModule, PrismaModule, UsersModule, AuditlogModule],
+    AuthModule,
+    PrismaModule,
+    UsersModule,
+    AuditlogModule,
+  ],
   controllers: [AppController],
-  providers: [AppService,
+  providers: [
+    AppService,
     {
       provide: APP_GUARD,
       useClass: JwtAuthGuard,
@@ -27,6 +32,5 @@ import { AuditlogModule } from './auditlog/auditlog.module';
       useClass: RolesGuard,
     },
   ],
-
 })
-export class AppModule { }
+export class AppModule {}

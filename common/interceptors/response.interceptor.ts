@@ -12,12 +12,12 @@ type ApiSuccessResponse<T> = {
     statusCode: number;
     message: string;
     data: T | null;
-};
+} & Record<string, unknown>;
 
 type ResponseWithMessage<T> = {
     message?: string;
     data?: T;
-};
+} & Record<string, unknown>;
 
 @Injectable()
 export class ResponseInterceptor<T>
@@ -35,6 +35,13 @@ export class ResponseInterceptor<T>
                 const hasBodyObject = body !== null && typeof body === 'object';
                 const hasDataField = hasBodyObject && 'data' in normalizedBody;
                 const hasMessageField = hasBodyObject && 'message' in normalizedBody;
+                const extraFields = hasBodyObject && (hasDataField || hasMessageField)
+                    ? Object.fromEntries(
+                        Object.entries(normalizedBody).filter(
+                            ([key]) => key !== 'message' && key !== 'data',
+                        ),
+                    )
+                    : {};
 
                 return {
                     success: true,
@@ -44,6 +51,7 @@ export class ResponseInterceptor<T>
                             ? normalizedBody.message
                             : 'Success',
                     data: hasDataField ? normalizedBody.data ?? null : body ?? null,
+                    ...extraFields,
                 };
             }),
         );

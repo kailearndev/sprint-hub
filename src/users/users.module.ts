@@ -9,4 +9,4 @@ import { AuditlogModule } from '@/auditlog/auditlog.module';
   providers: [UsersService],
   imports: [SharedModule, AuditlogModule],
 })
-export class UsersModule { }
+export class UsersModule {}

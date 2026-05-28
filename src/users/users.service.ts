@@ -1,13 +1,16 @@
-import { ConflictException, Injectable } from '@nestjs/common';
-import { CreateUserDto } from './dto/create-user.dto';
-import { UpdateUserDto } from './dto/update-user.dto';
+import { AuditlogService } from '@/auditlog/auditlog.service';
+import { AuditAction, UserRole, UserStatus } from '@/generated/prisma/enums';
 import { PrismaService } from '@/prisma/prisma.service';
 import { HashingService } from '@/shared/services/hashing.service';
-import { PaginationQueryDto } from 'common/pagination/pagination-query.dto';
+import {
+  ConflictException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { paginate } from 'common/pagination/paginate';
+import { CreateUserDto } from './dto/create-user.dto';
+import { UpdateUserDto } from './dto/update-user.dto';
 import { UserQueryDto } from './dto/user.query.dto';
-import { AuditAction, UserRole, UserStatus } from '@/generated/prisma/enums';
-import { AuditlogService } from '@/auditlog/auditlog.service';
 
 type AuditRequestContext = {
   actorId?: string | null;
@@ -21,12 +24,16 @@ export class UsersService {
     private readonly prisma: PrismaService,
     private readonly hashService: HashingService,
     private readonly auditlogService: AuditlogService,
-  ) { }
+  ) {}
 
-
-  async create(createUserDto: CreateUserDto, auditContext?: AuditRequestContext) {
+  async create(
+    createUserDto: CreateUserDto,
+    auditContext?: AuditRequestContext,
+  ) {
     await this.ensureUserNotExists(createUserDto.email);
-    const hashedPassword = await this.hashService.hash(createUserDto.password || 'user_123_password');
+    const hashedPassword = await this.hashService.hash(
+      createUserDto.password || 'user_123_password',
+    );
     const user = await this.prisma.user.create({
       data: {
         ...createUserDto,
@@ -48,7 +55,7 @@ export class UsersService {
     });
     return {
       message: 'User created successfully',
-    }
+    };
   }
 
   async findAll(query: UserQueryDto, currentRole: UserRole) {
@@ -95,7 +102,6 @@ export class UsersService {
         status: true,
         createdAt: true,
         updatedAt: true,
-
         ...(isSuperAdmin && {
           deletedAt: true,
         }),
@@ -104,22 +110,31 @@ export class UsersService {
   }
 
   async findOne(id: string) {
-    await this.ensureUserExists(id);
-    return this.prisma.user.findUnique({
+    const user = await this.prisma.user.findUnique({
       where: { id },
       select: {
         id: true,
         email: true,
         name: true,
         role: true,
+        status: true,
         createdAt: true,
         updatedAt: true,
-        status: true,
       },
     });
+
+    if (!user) {
+      throw new NotFoundException('User not found');
+    }
+
+    return user;
   }
 
-  async update(id: string, updateUserDto: UpdateUserDto, auditContext?: AuditRequestContext) {
+  async update(
+    id: string,
+    updateUserDto: UpdateUserDto,
+    auditContext?: AuditRequestContext,
+  ) {
     await this.ensureUserExists(id);
 
     const user = await this.prisma.user.update({
@@ -148,7 +163,7 @@ export class UsersService {
     });
     return {
       message: 'User updated successfully',
-    }
+    };
   }
 
   async remove(id: string, auditContext?: AuditRequestContext) {
@@ -174,9 +189,8 @@ export class UsersService {
     });
     return {
       message: 'User deleted successfully',
-    }
+    };
   }
-
 
   private async ensureUserNotExists(email: string) {
     const user = await this.prisma.user.findUnique({
@@ -184,9 +198,7 @@ export class UsersService {
     });
 
     if (user) {
-      throw new ConflictException(
-        'User with this email already exists',
-      );
+      throw new ConflictException('User with this email already exists');
     }
   }
   private async ensureUserExists(id: string) {
@@ -195,9 +207,7 @@ export class UsersService {
     });
 
     if (!user) {
-      throw new ConflictException(
-        'User not found',
-      );
+      throw new NotFoundException('User not found');
     }
   }
 }

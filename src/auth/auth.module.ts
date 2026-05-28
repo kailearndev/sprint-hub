@@ -10,25 +10,18 @@ import { AuditlogModule } from '@/auditlog/auditlog.module';
 
 @Module({
   imports: [
-
     JwtModule.register({
       secret: process.env.JWT_SECRET_KEY,
       signOptions: {
-        expiresIn: process.env.JWT_EXPIRES_IN as any || '1h',
+        expiresIn: (process.env.JWT_EXPIRES_IN as any) || '1h',
       },
     }),
     PassportModule,
     SharedModule,
     AuditlogModule,
-
   ],
-  providers: [
-    AuthService,
-    TokenService,
-    JwtStrategy,
-
-  ],
+  providers: [AuthService, TokenService, JwtStrategy],
   controllers: [AuthController],
-  exports: [AuthService]
+  exports: [AuthService],
 })
-export class AuthModule { }
+export class AuthModule {}

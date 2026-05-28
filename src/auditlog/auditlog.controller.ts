@@ -7,7 +7,7 @@ import { AuditlogQueryDto } from './dto/auditlog.query.dto';
 @Roles(UserRole.SUPER_ADMIN)
 @Controller('audit-logs')
 export class AuditlogController {
-  constructor(private readonly auditlogService: AuditlogService) { }
+  constructor(private readonly auditlogService: AuditlogService) {}
 
   @Get()
   findAll(@Query() query: AuditlogQueryDto) {

@@ -1,6 +1,16 @@
 import { UserRole } from '@/generated/prisma/enums';
 import type { JwtPayload } from '@/types/jwt-payload.type';
-import { Body, Controller, Delete, Get, Param, Patch, Post, Query, Req } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  Param,
+  Patch,
+  Post,
+  Query,
+  Req,
+} from '@nestjs/common';
 import { CurrentUser } from 'common/decorators/current-user.decorator';
 import { Roles } from 'common/decorators/roles.decorator';
 import { CreateUserDto } from './dto/create-user.dto';
@@ -19,7 +29,7 @@ function getAuditContext(req: Request, user?: JwtPayload) {
 // @Public()
 @Controller('users')
 export class UsersController {
-  constructor(private readonly usersService: UsersService) { }
+  constructor(private readonly usersService: UsersService) {}
   @Get('me')
   me(@CurrentUser() user: JwtPayload) {
     return user;
@@ -51,7 +61,11 @@ export class UsersController {
     @CurrentUser() user: JwtPayload,
     @Req() req: Request,
   ) {
-    return this.usersService.update(id, updateUserDto, getAuditContext(req, user));
+    return this.usersService.update(
+      id,
+      updateUserDto,
+      getAuditContext(req, user),
+    );
   }
   @Roles(UserRole.SUPER_ADMIN)
   @Delete(':id')

@@ -7,24 +7,23 @@ import type { Request } from 'express';
 
 @Injectable()
 export class JwtStrategy extends PassportStrategy(Strategy, 'jwt') {
-    constructor() {
-        const secret = process.env.JWT_SECRET_KEY;
+  constructor() {
+    const secret = process.env.JWT_SECRET_KEY;
 
-        if (!secret) {
-            throw new Error('JWT_SECRET_KEY is missing');
-        }
-
-        super({
-            jwtFromRequest: ExtractJwt.fromExtractors([
-                ExtractJwt.fromAuthHeaderAsBearerToken(),
-                (request: Request) => request?.cookies?.accessToken,
-            ]),
-            ignoreExpiration: false,
-            secretOrKey: secret,
-        });
-
+    if (!secret) {
+      throw new Error('JWT_SECRET_KEY is missing');
     }
-    validate(payload: JwtPayload): JwtPayload {
-        return payload;
-    }
+
+    super({
+      jwtFromRequest: ExtractJwt.fromExtractors([
+        ExtractJwt.fromAuthHeaderAsBearerToken(),
+        (request: Request) => request?.cookies?.accessToken as string,
+      ]),
+      ignoreExpiration: false,
+      secretOrKey: secret,
+    });
+  }
+  validate(payload: JwtPayload): JwtPayload {
+    return payload;
+  }
 }
